@@ -48,7 +48,8 @@ redis外部端口8002，密码:GoSpider-docker
 使用Golang环境请执行
 
 ```
-docker exec -it GoSpiderGo /bin/bash
+docker-compose ps
+docker exec -it xxxx(找到的容器名) /bin/bash
 ```
 
 或者打开浏览器：127.0.0.1:9999  账号：admin 密码:GoSpider
