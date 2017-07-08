@@ -7,7 +7,6 @@ services:
       volumes:
         - $HOME/mydocker/redis/data:/data
         - $HOME/mydocker/redis/conf/redis.conf:/usr/local/etc/redis/redis.conf
-
     mysqldb: 
       image: mysql
       ports: 
@@ -17,3 +16,13 @@ services:
       volumes:
         - $HOME/mydocker/mysql/data:/var/lib/mysql
         - $HOME/mydocker/mysql/conf:/etc/mysql/conf.d
+	
+    golang1.8:
+      build: ./golang1.8
+      net: "host"
+      links: 
+        - redis
+        - mysqldb
+      volumes:
+        - $HOME/mydocker/go:/go		
+		
