@@ -111,7 +111,10 @@ services:
       volumes:
         - $HOME/mydocker/mysql/data:/var/lib/mysql
         - $HOME/mydocker/mysql/conf:/etc/mysql/conf.d
-	
+		
+		
+		以下删除，太慢，请自行进go环境go get
+	##############################################
     golang1.8:
       build: ./golang1.8
       net: "host"
@@ -120,6 +123,7 @@ services:
         - mysqldb
       volumes:
         - $HOME/mydocker/go:/go
+	############################################
 ```
 
 可适当改端口
