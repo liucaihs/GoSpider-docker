@@ -18,14 +18,4 @@ services:
       volumes:
         - $HOME/mydocker/mysql/data:/var/lib/mysql
         - $HOME/mydocker/mysql/conf:/etc/mysql/conf.d
-	
-    golang1.8:
-      container_name: "GoSpide-golang1.8"
-      build: ./golang1.8
-      net: "host"
-      links: 
-        - redis
-        - mysqldb
-      volumes:
-        - $HOME/mydocker/go:/go		
 		

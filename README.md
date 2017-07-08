@@ -14,13 +14,18 @@
 
 请参考：
 
-
 Dokcer安装：[http://www.lenggirl.com/tool/docker-ubuntu-install.html](http://www.lenggirl.com/tool/docker-ubuntu-install.html)
 
 国内的推荐这样安装：[http://www.lenggirl.com/tool/docker-install.html](http://www.lenggirl.com/tool/docker-install.html)
 
 Docker-compose安装：[http://www.lenggirl.com/tool/docker-compose.html](http://www.lenggirl.com/tool/docker-compose.html)
 
+我已经写好脚本，请直接运行
+
+```
+chmod 777 docker-install.sh
+./docker-install.sh
+```
 
 # 二. 使用
 
@@ -45,16 +50,6 @@ mysql外部端口8003，账号密码:root/123456
 
 redis外部端口8002，密码:GoSpider
 
-进入Golang环境请执行
-
-```
-docker exec -it GoSpide-golang1.8 /bin/bash
-```
-
-或者打开浏览器：127.0.0.1:9999  账号：admin 密码:GoSpider
-
-Golang环境下开发跑程序可使用Mysql和redis本来的端口3306和6379
-
 因为容器挂卷，在内部或外部修改代码，都会同步
 
 如果本机没有安装`mysql`和`redis`客户端，可执行
@@ -62,6 +57,15 @@ Golang环境下开发跑程序可使用Mysql和redis本来的端口3306和6379
 ```
 docker exec -it GoSpider-redis redis-cli -a GoSpider
 docker exec -it  GoSpide-mysqldb mysql -uroot -p123456
+```
+
+进入golang环境命令已经在`build.sh`中设置好
+
+命令如下:
+
+```
+docker pull golang:1.8
+docker run --rm --net=host -it -v $HOME/mydocker/go:/go --name mygolang golang:1.8 /bin/bash
 ```
 
 # 三. 原理
@@ -73,10 +77,12 @@ mkdir -p $HOME/mydocker/redis/data
 mkdir -p $HOME/mydocker/redis/conf
 mkdir -p $HOME/mydocker/mysql/data
 mkdir -p $HOME/mydocker/mysql/conf
+mkdir -p $HOME/mydocker/go
 cp my.cnf $HOME/mydocker/redis/conf
 cp redis.conf $HOME/mydocker/mysql/conf
 docker-compose up -d
-
+docker pull golang:1.8
+docker run --rm --net=host -it -v $HOME/mydocker/go:/go --name mygolang golang:1.8 /bin/bash
 ```
 
 原理是先将`mysql`和redis`的配置文件移动到根目录下的某个地方，再挂载进容器，数据库数据会保存在本地，即使容器死掉也可重启不丢。
