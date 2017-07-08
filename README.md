@@ -43,22 +43,26 @@ chomd 777 build.sh
 
 mysql外部端口8003，账号密码:root/123456
 
-redis外部端口8002，密码:GoSpider-docker
+redis外部端口8002，密码:GoSpider
 
-使用Golang环境请执行
+进入Golang环境请执行
 
 ```
-docker-compose ps
-docker exec -it xxxx(找到的容器名) /bin/bash
+docker exec -it GoSpide-golang1.8 /bin/bash
 ```
 
 或者打开浏览器：127.0.0.1:9999  账号：admin 密码:GoSpider
 
-改端口或密码参见下方。
-
 Golang环境下开发跑程序可使用Mysql和redis本来的端口3306和6379
 
 因为容器挂卷，在内部或外部修改代码，都会同步
+
+如果本机没有安装`mysql`和`redis`客户端，可执行
+
+```
+docker exec -it GoSpider-redis redis-cli -a GoSpider
+docker exec -it  GoSpide-mysqldb mysql -uroot -p123456
+```
 
 # 三. 原理
 `build.sh`内容如下：
@@ -82,7 +86,7 @@ docker-compose up -d
 
 `docker-compose.yaml`内容如下：
 
-···
+```
 version: '2'
 services:
     redis: 
@@ -110,7 +114,9 @@ services:
         - mysqldb
       volumes:
         - $HOME/mydocker/go:/go
-···
+```
+
+可适当改端口
 
 
 

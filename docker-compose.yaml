@@ -1,6 +1,7 @@
 version: '2'
 services:
     redis: 
+      container_name: "GoSpider-redis"
       image: redis:3.2
       ports: 
         - "8002:6379"
@@ -8,6 +9,7 @@ services:
         - $HOME/mydocker/redis/data:/data
         - $HOME/mydocker/redis/conf/redis.conf:/usr/local/etc/redis/redis.conf
     mysqldb: 
+      container_name: "GoSpide-mysqldb"
       image: mysql
       ports: 
         - "8003:3306"
@@ -18,6 +20,7 @@ services:
         - $HOME/mydocker/mysql/conf:/etc/mysql/conf.d
 	
     golang1.8:
+      container_name: "GoSpide-golang1.8"
       build: ./golang1.8
       net: "host"
       links: 
