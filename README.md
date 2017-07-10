@@ -56,7 +56,9 @@ redis外部端口8002，密码:GoSpider
 
 ```
 docker exec -it GoSpider-redis redis-cli -a GoSpider
-docker exec -it  GoSpide-mysqldb mysql -uroot -p123456
+docker exec -it  GoSpider-mysqldb mysql -uroot -p123456
+
+mysql> show variables like '%max_connect%';
 ```
 
 进入golang环境命令已经在`build.sh`中设置好
@@ -128,5 +130,11 @@ services:
 
 可适当改端口
 
+
+# 单一镜像
+
+Web端进入，一个强大的镜像，自带redis,mysql,golang,golang IDE 
+
+[https://github.com/hunterhug/docker-ubuntu-vnc-desktop](https://github.com/hunterhug/docker-ubuntu-vnc-desktop)
 
 
