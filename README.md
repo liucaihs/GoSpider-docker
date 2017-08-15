@@ -6,7 +6,7 @@
 
 所以做了这个库，现在是容器化的时代，本人也从事云计算，所以用docker来快速部署环境。
 
-这个库目前部署的环境有`redis`,`mysql`,`golang`。
+这个库目前部署的环境有`redis`,`mysql`,`golang`。`golang`去除，我建议安装在本地。
 
 你先要有一台Linux操作系统的计算机，我建议安装`ubuntu16.04`。
 
@@ -20,12 +20,14 @@ Dokcer安装：[http://www.lenggirl.com/tool/docker-ubuntu-install.html](http://www
 
 Docker-compose安装：[http://www.lenggirl.com/tool/docker-compose.html](http://www.lenggirl.com/tool/docker-compose.html)
 
-我已经写好脚本，请直接运行
+我已经写好脚本安装docker了，请直接运行
 
 ```
 chmod 777 docker-install.sh
 ./docker-install.sh
 ```
+
+我还是建议你可以百度一下。
 
 # 二. 使用
 
@@ -61,7 +63,7 @@ docker exec -it  GoSpider-mysqldb mysql -uroot -p123456
 mysql> show variables like '%max_connect%';
 ```
 
-进入golang环境命令已经在`build.sh`中设置好
+进入golang，我建议本地安装，或者你可以通过docker这样安装：
 
 命令如下:
 
@@ -75,16 +77,17 @@ docker run --rm --net=host -it -v $HOME/mydocker/go:/go --name mygolang golang:1
 
 ```
 #!/bin/bash
-mkdir -p $HOME/mydocker/redis/data
-mkdir -p $HOME/mydocker/redis/conf
-mkdir -p $HOME/mydocker/mysql/data
-mkdir -p $HOME/mydocker/mysql/conf
-mkdir -p $HOME/mydocker/go
-cp my.cnf $HOME/mydocker/redis/conf
-cp redis.conf $HOME/mydocker/mysql/conf
-docker-compose up -d
-docker pull golang:1.8
-docker run --rm --net=host -it -v $HOME/mydocker/go:/go --name mygolang golang:1.8 /bin/bash
+#sudo rm -rf $HOME/mydocker
+sudo mkdir -p $HOME/mydocker/redis/data
+sudo mkdir -p $HOME/mydocker/redis/conf
+sudo mkdir -p $HOME/mydocker/mysql/data
+sudo mkdir -p $HOME/mydocker/mysql/conf
+sudo mkdir -p $HOME/mydocker/go
+sudo cp my.cnf $HOME/mydocker/mysql/conf/my.cnf
+sudo cp redis.conf $HOME/mydocker/redis/conf/redis.conf
+sudo docker-compose stop
+sudo docker-compose rm -f
+sudo docker-compose up -d
 ```
 
 原理是先将`mysql`和redis`的配置文件移动到根目录下的某个地方，再挂载进容器，数据库数据会保存在本地，即使容器死掉也可重启不丢。
@@ -98,43 +101,25 @@ docker run --rm --net=host -it -v $HOME/mydocker/go:/go --name mygolang golang:1
 version: '2'
 services:
     redis: 
+      container_name: "GoSpider-redis"
       image: redis:3.2
       ports: 
-        - "8002:6379"
+        - "6379:6379"
       volumes:
         - $HOME/mydocker/redis/data:/data
-        - $HOME/mydocker/redis/conf/redis.conf:/usr/local/etc/redis/redis.conf
+        - $HOME/mydocker/redis/conf:/usr/local/etc/redis
+      command: redis-server /usr/local/etc/redis/redis.conf
     mysqldb: 
-      image: mysql
+      container_name: "GoSpider-mysqldb"
+      image: mysql:5.7
       ports: 
-        - "8003:3306"
+        - "3306:3306"
       environment: 
-        - MYSQL_ROOT_PASSWORD=123456
+        - MYSQL_ROOT_PASSWORD=459527502
       volumes:
         - $HOME/mydocker/mysql/data:/var/lib/mysql
         - $HOME/mydocker/mysql/conf:/etc/mysql/conf.d
-		
-		
-		以下删除，太慢，请自行进go环境go get
-	##############################################
-    golang1.8:
-      build: ./golang1.8
-      net: "host"
-      links: 
-        - redis
-        - mysqldb
-      volumes:
-        - $HOME/mydocker/go:/go
-	############################################
 ```
 
 可适当改端口
-
-
-# 单一镜像
-
-Web端进入，一个强大的镜像，自带redis,mysql,golang,golang IDE 
-
-[https://github.com/hunterhug/docker-ubuntu-vnc-desktop](https://github.com/hunterhug/docker-ubuntu-vnc-desktop)
-
 

@@ -14,6 +14,3 @@ sudo cp redis.conf $HOME/mydocker/redis/conf/redis.conf
 sudo docker-compose stop
 sudo docker-compose rm -f
 sudo docker-compose up -d
-#sudo chmod 775 -R $HOME/mydocker
-sudo docker pull golang:1.8
-sudo docker run --rm --net=host -it -v $HOME/mydocker/go:/go --name mygolang golang:1.8 /bin/bash

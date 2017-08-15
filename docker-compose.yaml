@@ -4,7 +4,7 @@ services:
       container_name: "GoSpider-redis"
       image: redis:3.2
       ports: 
-        - "8002:6379"
+        - "6379:6379"
       volumes:
         - $HOME/mydocker/redis/data:/data
         - $HOME/mydocker/redis/conf:/usr/local/etc/redis
@@ -13,9 +13,9 @@ services:
       container_name: "GoSpider-mysqldb"
       image: mysql:5.7
       ports: 
-        - "8003:3306"
+        - "3306:3306"
       environment: 
-        - MYSQL_ROOT_PASSWORD=123456
+        - MYSQL_ROOT_PASSWORD=459527502
       volumes:
         - $HOME/mydocker/mysql/data:/var/lib/mysql
         - $HOME/mydocker/mysql/conf:/etc/mysql/conf.d
